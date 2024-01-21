@@ -1,11 +1,9 @@
 package com.ex.novatech.bankinc.service;
 
+import com.ex.novatech.bankinc.helper.CardHelper;
 import com.ex.novatech.bankinc.model.Card;
 import com.ex.novatech.bankinc.model.Client;
 import com.ex.novatech.bankinc.repository.CardRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -26,28 +24,13 @@ public class CardService {
         this.clientService = clientService;
     }
 
-    private String generateRandomCardNumber(String productId){
-        long milliSeconds = Instant.now().toEpochMilli(); //Tiene una longitud de 13 digitos
-        String payload = String.valueOf(milliSeconds).substring(3);
-        return productId + payload;
-    }
-
-    private LocalDate generateCardExpirationDate(){
-        LocalDate currentDate = LocalDate.now();
-        return LocalDate.of(
-                currentDate.getYear() + 3,
-                currentDate.getMonth(),
-                currentDate.getDayOfYear()
-        );
-    }
-
     public Card createCardWithProductId(String productId){
         //TODO: Agregar un faker para los datos del cliente
         Client newClient = new Client("Jorge", "Sanabria");
         this.clientService.save(newClient);
 
-        String cardNumber = this.generateRandomCardNumber(productId);
-        LocalDate futureDate = this.generateCardExpirationDate();
+        String cardNumber = CardHelper.generateRandomCardNumber(productId);
+        LocalDate futureDate = CardHelper.generateCardExpirationDate();
         Card newCard = Card.builder()
                 .cardNumber(cardNumber)
                 .type(Card.CardType.CREDIT_CARD) //TODO: Agregar faker

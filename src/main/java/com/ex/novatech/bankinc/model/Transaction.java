@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Entity
@@ -13,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Transaction extends BaseEntity {
+    public static int TIME_CANCELLED = 24;
 
     @ManyToOne
     @JoinColumn(name = "id_card", nullable = false)
@@ -25,20 +28,26 @@ public class Transaction extends BaseEntity {
     private boolean canceled;
 
     @Column(name = "canceled_at")
-    private Timestamp canceled_at;
+    private Timestamp canceledAt;
 
     public Transaction() { }
     @Builder
-    public Transaction(UUID id, Timestamp createdAt, Card card, double price, boolean canceled, Timestamp canceled_at) {
+    public Transaction(UUID id, Timestamp createdAt, Card card, double price, boolean canceled, Timestamp canceledAt) {
         super(id, createdAt);
         this.card = card;
         this.price = price;
         this.canceled = canceled;
-        this.canceled_at = canceled_at;
+        this.canceledAt = canceledAt;
     }
 
     public Transaction(Card card, double price){
         this.card = card;
         this.price = price;
+    }
+
+    public boolean canTransactionBeCanceled(){
+        LocalDateTime transactionDate = this.getCreatedAt().toLocalDateTime();
+        long hoursDifference = transactionDate.until(LocalDateTime.now(), ChronoUnit.HOURS);
+        return hoursDifference < Transaction.TIME_CANCELLED;
     }
 }

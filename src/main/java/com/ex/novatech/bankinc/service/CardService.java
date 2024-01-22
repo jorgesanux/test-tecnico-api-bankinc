@@ -4,17 +4,14 @@ import com.ex.novatech.bankinc.helper.CardHelper;
 import com.ex.novatech.bankinc.model.Card;
 import com.ex.novatech.bankinc.model.Client;
 import com.ex.novatech.bankinc.repository.CardRepository;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import org.hibernate.validator.constraintvalidation.HibernateConstraintViolationBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,6 +28,7 @@ public class CardService {
         this.clientService = clientService;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Card createCardWithProductId(String productId){
         //TODO: Agregar un faker para los datos del cliente
         Client newClient = new Client("Jorge", "Sanabria");
@@ -68,6 +66,11 @@ public class CardService {
         double currentBalance = card.getBalance();
         card.setBalance(currentBalance + balance);
         return this.cardRepository.save(card);
+    }
+
+    public void addBalance(Card card, double balance){
+        double currentBalance = card.getBalance();
+        card.setBalance(currentBalance + balance);
     }
 
     public Optional<Card> getCardById(UUID cardId){

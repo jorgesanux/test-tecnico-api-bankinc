@@ -1,8 +1,7 @@
 package com.ex.novatech.bankinc.controller;
 
-import com.ex.novatech.bankinc.dto.CardEnrollDTO;
+import com.ex.novatech.bankinc.dto.TransactionCancellationDTO;
 import com.ex.novatech.bankinc.dto.TransactionCreateDTO;
-import com.ex.novatech.bankinc.model.Card;
 import com.ex.novatech.bankinc.model.Transaction;
 import com.ex.novatech.bankinc.service.TransactionService;
 import jakarta.validation.Valid;
@@ -35,5 +34,11 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.CREATED)
     public Transaction transactionPurchase(@Valid @RequestBody TransactionCreateDTO body){
         return this.transactionService.createTransaction(body.getCardId(), body.getPrice());
+    }
+
+    @PostMapping("/anulation")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void transactionCancellation(@Valid @RequestBody TransactionCancellationDTO body){
+        this.transactionService.transactionCancellation(body.getCardId(), body.getTransactionId());
     }
 }

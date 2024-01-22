@@ -5,6 +5,7 @@ import com.ex.novatech.bankinc.dto.CardEnrollDTO;
 import com.ex.novatech.bankinc.helper.CardHelper;
 import com.ex.novatech.bankinc.model.Card;
 import com.ex.novatech.bankinc.service.CardService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class CardController {
 
     @PostMapping("/enroll")
     @ResponseStatus(HttpStatus.OK)
-    public Card enrollCard(@RequestBody CardEnrollDTO body){
+    public Card enrollCard(@Valid @RequestBody CardEnrollDTO body){
         return this.cardService.enrollCard(body.getCardId());
     }
 
@@ -46,7 +47,7 @@ public class CardController {
 
     @PostMapping("/balance")
     @ResponseStatus(HttpStatus.OK)
-    public Card addBalanceToCard(@RequestBody CardBalanceDTO body){
+    public Card addBalanceToCard(@Valid @RequestBody CardBalanceDTO body){
         return this.cardService.addBalance(body.getCardId(), body.getBalance());
     }
 

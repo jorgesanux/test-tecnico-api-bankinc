@@ -16,8 +16,5 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CardEnrollDTO {
     @NotNull
-    @NotBlank
-    @NotEmpty
-    @org.hibernate.validator.constraints.UUID
     private UUID cardId;
 }

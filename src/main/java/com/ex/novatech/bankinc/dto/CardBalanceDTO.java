@@ -17,9 +17,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CardBalanceDTO {
     @NotNull
-    @NotBlank
-    @NotEmpty
-    @org.hibernate.validator.constraints.UUID
     private UUID cardId;
 
     @Positive

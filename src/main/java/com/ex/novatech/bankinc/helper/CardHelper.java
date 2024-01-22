@@ -1,5 +1,8 @@
 package com.ex.novatech.bankinc.helper;
 
+import com.ex.novatech.bankinc.dto.CardBalanceDTO;
+import com.ex.novatech.bankinc.model.Card;
+
 import java.time.Instant;
 import java.time.LocalDate;
 
@@ -18,5 +21,9 @@ public class CardHelper {
                 currentDate.getMonth(),
                 currentDate.getDayOfYear()
         );
+    }
+
+    public static CardBalanceDTO mapCardToBalanceDTO(Card card){
+        return new CardBalanceDTO(card.getId(), card.getBalance());
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -49,11 +50,22 @@ public class CardService {
         return this.cardRepository.save(card);
     }
 
-    public Card blockCard(UUID cardId){
+    public void blockCard(UUID cardId){
         Card card = this.cardRepository.findById(cardId).orElseThrow();
         card.setBlocked(true);
         card.setBlockedAt(Timestamp.from(Instant.now()));
+        this.cardRepository.save(card);
+    }
+
+    public Card addBalance(UUID cardId, double balance){
+        Card card = this.cardRepository.findById(cardId).orElseThrow();
+        double currentBalance = card.getBalance();
+        card.setBalance(currentBalance + balance);
         return this.cardRepository.save(card);
+    }
+
+    public Optional<Card> getCardById(UUID cardId){
+        return this.cardRepository.findById(cardId);
     }
 
 }

@@ -10,14 +10,12 @@ import java.util.List;
 @Getter
 @Setter
 public class ErrorDTO {
-    private Date timestamp;
+    private Date timestamp = new Date();
     private int status;
     private String path;
     private List<String> errors = new ArrayList<>();
 
-    public ErrorDTO(){
-        this.timestamp = new Date();
-    }
+    public ErrorDTO(){ }
 
     public ErrorDTO(int status, String path) {
         this.status = status;

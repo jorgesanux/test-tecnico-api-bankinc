@@ -9,8 +9,8 @@ import java.util.UUID;
 
 @Service
 public class TransactionService {
-    private TransactionRepository transactionRepository;
-    private CardService cardService;
+    final private TransactionRepository transactionRepository;
+    final private CardService cardService;
 
     public TransactionService(
             final TransactionRepository transactionRepository,
@@ -27,5 +27,9 @@ public class TransactionService {
         this.cardService.subtractFromBalance(card, price);
         this.cardService.save(card);
         return this.transactionRepository.save(transaction);
+    }
+
+    public Transaction getTransactionById(UUID transactionId){
+        return this.transactionRepository.findById(transactionId).orElseThrow();
     }
 }

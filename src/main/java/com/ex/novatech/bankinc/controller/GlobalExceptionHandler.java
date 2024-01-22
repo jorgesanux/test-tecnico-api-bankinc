@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +30,21 @@ public class GlobalExceptionHandler {
     public ErrorDTO handleBadRequestExceptions(HttpServletRequest request, Exception ex) {
         ErrorDTO error = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), request.getServletPath());
         error.addError(ex.getMessage());
+        LOGGER.error(ex.getMessage(), ex);
+        return error;
+    }
+
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class
+    })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorDTO handleDTOValidationExceptions(HttpServletRequest request, MethodArgumentNotValidException ex) {
+        ErrorDTO error = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), request.getServletPath());
+        ex.getBindingResult().getAllErrors().forEach((err) -> {
+            FieldError fieldError = ((FieldError)err);
+            error.addError(String.format("%s %s", fieldError.getField(), err.getDefaultMessage()));
+        });
         LOGGER.error(ex.getMessage(), ex);
         return error;
     }

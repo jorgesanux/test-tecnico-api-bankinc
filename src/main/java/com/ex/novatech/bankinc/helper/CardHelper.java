@@ -15,12 +15,12 @@ public class CardHelper {
     }
 
     public static LocalDate generateCardExpirationDate(){
-        LocalDate currentDate = LocalDate.now();
-        return LocalDate.of(
-                currentDate.getYear() + CardHelper.VALIDITY_YEARS,
-                currentDate.getMonth(),
-                currentDate.getDayOfYear()
-        );
+        LocalDate currentDate = DateHelper.generateCurrentFirstDayDate();
+        return currentDate.plusYears(CardHelper.VALIDITY_YEARS);
+    }
+
+    public static LocalDate mapCardExpirationDate(Card card){
+        return LocalDate.of(card.getExpirationYear(), card.getExpirationMonth(), 1);
     }
 
     public static CardBalanceDTO mapCardToBalanceDTO(Card card){

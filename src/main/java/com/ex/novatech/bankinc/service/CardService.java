@@ -85,4 +85,8 @@ public class CardService {
         card.setBalance(result);
     }
 
+    public boolean isCardValid(Card card, LocalDate referenceDate){
+        LocalDate cardDate = CardHelper.mapCardExpirationDate(card);
+        return referenceDate.isBefore(cardDate);
+    }
 }

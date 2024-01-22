@@ -3,6 +3,7 @@ package com.ex.novatech.bankinc.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,6 +71,10 @@ public class Card extends BaseEntity {
         this.blocked = blocked;
         this.blockedAt = blockedAt;
         this.status = status;
+    }
+
+    public boolean isActive(){
+        return this.status == Card.CardStatus.ACTIVE;
     }
 
 }

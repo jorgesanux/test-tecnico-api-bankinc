@@ -4,11 +4,17 @@ import com.ex.novatech.bankinc.helper.CardHelper;
 import com.ex.novatech.bankinc.model.Card;
 import com.ex.novatech.bankinc.model.Client;
 import com.ex.novatech.bankinc.repository.CardRepository;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import org.hibernate.validator.constraintvalidation.HibernateConstraintViolationBuilder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -66,6 +72,17 @@ public class CardService {
 
     public Optional<Card> getCardById(UUID cardId){
         return this.cardRepository.findById(cardId);
+    }
+
+    public Card save(Card card){
+        return this.cardRepository.save(card);
+    }
+
+    public void subtractFromBalance(Card card, double value) throws ConstraintViolationException{
+        double result = card.getBalance() - value;
+        if(result < 0)
+            throw new ConstraintViolationException(String.format("There is not enough balance to deduct %.2f", value), null);
+        card.setBalance(result);
     }
 
 }

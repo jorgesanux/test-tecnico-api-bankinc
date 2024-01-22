@@ -71,4 +71,5 @@ public class Card extends BaseEntity {
         this.blockedAt = blockedAt;
         this.status = status;
     }
+
 }
